@@ -16,15 +16,46 @@ def sentence_tokenizer(text):
 
     tokenized_text = sent_tokenize(text)
     print(tokenized_text)
+    return tokenized_text
 
 
 def word_tokenizer(text):
     
     tokenized_word=word_tokenize(text)
     print(tokenized_word)
+    return tokenized_word
+
+def freq_dist(tokenized_word):
+
+    from nltk.probability import FreqDist
+    import matplotlib.pyplot as plt
+
+    fdist = FreqDist(tokenized_word)
+    print(fdist)
+    print(fdist.most_common(2))
+
+    fdist.plot(30, cumulative=False)
+    plt.show()
 
 
-text = "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome"
+def remove_stop_words(tokenized_sent):
 
-sentence_tokenizer(text)
-word_tokenizer(text)
+    from nltk.corpus import stopwords
+    stop_words = set(stopwords.words("english"))
+    print(stop_words)
+
+    filtered_sent = []
+    for w in tokenized_sent:
+        if w not in stop_words:
+            print(w)
+            filtered_sent.append(w)
+    print("Tokenized Sentence:", tokenized_sent)
+    print("Filterd Sentence:", filtered_sent)
+
+
+text = "Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome and my mood is amazing!"
+
+tsent = sentence_tokenizer(text)
+tword = word_tokenizer(text)
+freq_dist(tword)
+remove_stop_words(tword)
