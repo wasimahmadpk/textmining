@@ -1,6 +1,7 @@
 import pandas as pd 
 import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import RegexpTokenizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
@@ -27,11 +28,15 @@ token = RegexpTokenizer(r'[a-zA-Z0-9]+')
 cv = CountVectorizer(lowercase=True,stop_words='english', ngram_range = (1, 1), tokenizer = token.tokenize)
 text_counts= cv.fit_transform(data['Phrase'])
 
+# feature extraction using TF-IDF
+tf=TfidfVectorizer()
+text_tfidf= tf.fit_transform(data['Phrase'])
+
 # split train and test sets
 X_train, X_test, y_train, y_test = train_test_split(
-    text_counts, data['Sentiment'], test_size=0.3, random_state=1)
+    text_tfidf, data['Sentiment'], test_size=0.3, random_state=1)
 
 # Model Generation Using Multinomial Naive Bayes
 clf = MultinomialNB().fit(X_train, y_train)
 predicted= clf.predict(X_test)
-print("MultinomialNB Accuracy:",metrics.accuracy_score(y_test, predicted))
+print("MultinomialNB Accuracy (TF-IDF):",metrics.accuracy_score(y_test, predicted))
